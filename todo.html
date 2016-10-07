@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TODO</title>
+    <link rel="stylesheet" type="text/css" href="todo.css">
+</head>
+
+
+<body>
+    <div class="container">
+      <p>
+        <label for="new-task">ADD ITEM</label>
+        <input id="new-task" type="text" placeholder="What needs to be done?">
+        <button>Add</button>
+      </p>
+
+      <div id="todos">
+         <h3>TODO</h3>
+         <ul id="incomplete-tasks">
+         </ul>
+         <strong id="count">0</strong>
+     </div>
+
+    <div id="completed">
+      <h3 class="completed">COMPLETED</h3>
+      <ul id="completed-tasks">
+        <li>
+            <input type="checkbox" checked>
+            <label>Nueiti pas gydytoja</label>
+            <input type="text">
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+        </li>
+      </ul>
+     </div>
+
+    <button onclick="deleteAll()" class="delete-all">Delete All</button>
+    <button onclick="todo()" class="todo">Todo</button>
+    <button onclick="completed()" class="completed">Completed</button>
+    </div>
+
+    <script type="text/javascript" src="todo.js"></script>
+
+</body>
+</html>
