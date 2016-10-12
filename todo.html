@@ -2,45 +2,42 @@
 <html>
 
 <head>
-    <title>TODO</title>
-    <link rel="stylesheet" type="text/css" href="todo.css">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="todo.css">
+
+    <title>TODOS</title>
+
 </head>
 
-
 <body>
-    <div class="container">
-      <p>
-        <label for="new-task">ADD ITEM</label>
-        <input id="new-task" type="text" placeholder="What needs to be done?">
-        <button>Add</button>
-      </p>
-
-      <div id="todos">
-         <h3>TODO</h3>
-         <ul id="incomplete-tasks">
-         </ul>
-         <strong id="count">0</strong>
-     </div>
-
-    <div id="completed">
-      <h3 class="completed">COMPLETED</h3>
-      <ul id="completed-tasks">
-        <li>
-            <input type="checkbox" checked>
-            <label>Nueiti pas gydytoja</label>
-            <input type="text">
-            <button class="edit">Edit</button>
-            <button class="delete">Delete</button>
-        </li>
-      </ul>
-     </div>
-
-    <button onclick="deleteAll()" class="delete-all">Delete All</button>
-    <button onclick="todo()" class="todo">Todo</button>
-    <button onclick="completed()" class="completed">Completed</button>
-    </div>
+    <form>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-md-6 col-md-offset-3">
+                        <p>TODOS</p>
+                        <div class="input_field">
+                            <input class="form-control" id="insert_input" type="text">
+                        </div>
+                        <footer>
+                            <ul class="nav nav-justified">
+                                <li role="presentation"><a href="#" class="items"></a></li>
+                                <li role="presentation"><a href="#" class="all">All</a></li>
+                                <li role="presentation"><a href="#" class="checked-hide">Active</a></li>
+                                <li role="presentation"><a href="#" class="checked-show">Complete</a></li>
+                                <li role="presentation"><a href="#" class="checked-delete">Clear completed</a></li>
+                            </ul>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 
     <script type="text/javascript" src="todo.js"></script>
 
 </body>
+
 </html>

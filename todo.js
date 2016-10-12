@@ -1,146 +1,112 @@
-var taskInput = document.getElementById("new-task");
-var addButton = document.getElementsByTagName("button")[0];
-var incompleteTasksHolder = document.getElementById("incomplete-tasks");
-var completedTasksHolder = document.getElementById("completed-tasks");
+$(document).ready(function () {
 
-//New Task List Item
-var createNewTaskElement = function(taskString) {
-  var listItem = document.createElement("li");
+    $(".nav").hide();
 
-  var checkBox = document.createElement("input"); // checkbox
-  var label = document.createElement("label");
-  var editInput = document.createElement("input"); // text
-  var editButton = document.createElement("button");
-  var deleteButton = document.createElement("button");
-  
-  
-  checkBox.type = "checkbox";
-  editInput.type = "text";
-  
-  editButton.innerText = "Edit";
-  editButton.className = "edit";
-  deleteButton.innerText = "Delete";
-  deleteButton.className = "delete";
-  
-  label.innerText = taskString;
-  
-    
-  listItem.appendChild(checkBox);
-  listItem.appendChild(label);
-  listItem.appendChild(editInput);
-  listItem.appendChild(editButton);
-  listItem.appendChild(deleteButton);
+    $("#insert_input").on("keypress", function (e) {
 
-  return listItem;
-}
+        var $this = $(this);
+        var newInputText = $this.val();
+        var inputCount = $(".input-group").length + 1;
 
-// Add a new task
-var addTask = function() {
-  var listItem = createNewTaskElement(taskInput.value);
-  incompleteTasksHolder.appendChild(listItem);
-  bindTaskEvents(listItem, taskCompleted);  
-  
-  taskInput.value = "";   
-}
+        if (e.which === 13) {
+            e.preventDefault();
+            $this.val("");
 
-// Edit an existing task
-var editTask = function() {  
-  var listItem = this.parentNode;
-  
-  var editInput = listItem.querySelector("input[type=text]")
-  var label = listItem.querySelector("label");
-  
-  var containsClass = listItem.classList.contains("editMode");
-  if(containsClass) {
-    label.innerText = editInput.value;
-  } else {
-    editInput.value = label.innerText;
-  }
-  
-  listItem.classList.toggle("editMode");
- 
-}
+            if (newInputText === '') {
+                alert("Nieko neivedete");
 
+            } else {
+                $(".input_field").append(getNewLineItem(newInputText));
+                $(".nav").show();
+                $(".items").text(inputCount + " item(s) left");
+            }
+        }
+    });
 
-// Delete an existing task
-var deleteTask = function() {
-  var listItem = this.parentNode;
-  var ul = listItem.parentNode;
-  
-  ul.removeChild(listItem);
-}
+    function getNewLineItem(inputText) {
+        return '<div class="input-group">' +
+            '<span class="input-group-addon">' +
+            '<input class="input-checkbox" type="checkbox" >' +
+            '</span>' +
+            '<input class="input-check form-control" type="text" value="' + inputText + '">' +
+            '<span class="input-remove input-group-addon">' +
+            '<a href="#">X</a>' +
+            '</span>' +
+            '</div>';
+    }
 
-// Mark a task as complete 
-var taskCompleted = function() {
-  var listItem = this.parentNode;
-  completedTasksHolder.appendChild(listItem);
-  bindTaskEvents(listItem, taskIncomplete);
-}
+    $(document).on("click", ".input-remove", function () {
 
-// Mark a task as incomplete
-var taskIncomplete = function() {
-  var listItem = this.parentNode;
-  incompleteTasksHolder.appendChild(listItem);
-  bindTaskEvents(listItem, taskCompleted);
-}
+        var checkedCount = $(".input-checkbox:checked").length;
+        var notcheckedCount = $(".input-checkbox:not(':checked')").length - 1;
+        var checkedCount2 = $(".input-checkbox:not(':checked')").length;
+        var all = notcheckedCount + checkedCount;
 
-var bindTaskEvents = function(taskListItem, checkBoxEventHandler) {
-  var checkBox = taskListItem.querySelector("input[type=checkbox]");
-  var editButton = taskListItem.querySelector("button.edit");
-  var deleteButton = taskListItem.querySelector("button.delete");
-  
-  editButton.onclick = editTask;
-  
-  deleteButton.onclick = deleteTask;
-  
-  checkBox.onchange = checkBoxEventHandler;
-}
+        $(this).parent().remove();
 
-var ajaxRequest = function() {
-  console.log("AJAX Request");
-}
+        if (notcheckedCount < 0) {
+            $(".items").text(checkedCount2 + " item(s) left");
 
-// Set the click handler to the addTask function
-addButton.addEventListener("click", addTask);
-addButton.addEventListener("click", ajaxRequest);
+        } else if (all < 1) {
+            $(".nav").hide();
 
+        } else {
+            $(".items").text(notcheckedCount + " item(s) left");
+        }
+    });
 
-for(var i = 0; i <  incompleteTasksHolder.children.length; i++) {
-  bindTaskEvents(incompleteTasksHolder.children[i], taskCompleted);
-}
-for(var i = 0; i <  completedTasksHolder.children.length; i++) {
-  bindTaskEvents(completedTasksHolder.children[i], taskIncomplete); 
+    $(document).on("click", ".checked-delete", function () {
+        
+        var $this = $(this);
+        var checkedCount = $(".input-checkbox:checked").length;
+        var notcheckedCount = $(".input-checkbox:not(':checked')").length;
+        var all = notcheckedCount && checkedCount;
 
-}
+        $(".input-checkbox:checked").parent().parent().remove();
 
-// Count incompleted list items
+        if (checkedCount > 0) {
+            $this.hide();
+            
+            if (all < 1) {
+                $(".nav").hide();
+            }
+        }
+    });
 
-function countItems(){
+    $(document).on("click", ".input-checkbox", function () {
 
-  var items = incompleteTasksHolder.getElementsByTagName("li");
-  for (var i = 0; i < items.length; ++i) {
-    if items[i] {
-      document.getElementById("count").innerHTML = "i";
-    };
-}
+        var $this = $(this);
+        var checkedCount = $(".input-checkbox:checked").length;
+        var notcheckedCount = $(".input-checkbox:not(':checked')").length;
+        var footer = $(".input-group").length - checkedCount;
 
-// Delete All
+        if ($this.is(":checked")) {
+            $this.parent().parent().find('.input-check').addClass("selected");
+            $(".items").text(notcheckedCount + " item(s) left");
+            $(".checked-delete").show();
 
-function deleteAll() {
-    var list = document.getElementById("completed-tasks");
-    list.parentNode.removeChild(list);
-}
+        } else {
+            $this.parent().parent().find('.input-check').removeClass("selected");
+            $(".items").text(footer + " item(s) left");
 
-// Only todos left
+            if (checkedCount < 1) {
+                $(".checked-delete").hide();
+            }
+        }
+    });
 
-function todo() {
-  var elem = document.getElementById('completed');
-  elem.parentNode.removeChild(elem);
-}
+    $(document).on("click", ".checked-hide", function () {
+        $(".input-checkbox:checked").parent().parent().hide();
+        $(".input-checkbox:not(:checked)").parent().parent().show();
+    });
 
-// Only completed left
+    $(document).on("click", ".checked-show", function () {
+        $(".input-checkbox:not(:checked)").parent().parent().hide();
+        $(".input-checkbox:checked").parent().parent().show();
+    });
 
-function completed() {
-  var elem = document.getElementById('todos');
-  elem.parentNode.removeChild(elem);
-}
+    $(document).on("click", ".all", function () {
+        $(".input-checkbox:checked").parent().parent().show();
+        $(".input-checkbox:not(:checked)").parent().parent().show();
+    });   
+});
