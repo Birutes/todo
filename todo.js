@@ -61,8 +61,10 @@ $(document).ready(function () {
         var checkedCount = $(".input-checkbox:checked").length;
         var notcheckedCount = $(".input-checkbox:not(':checked')").length;
         var all = notcheckedCount && checkedCount;
-
+        
+        function clearCompleted(){     
         $(".input-checkbox:checked").parent().parent().remove();
+        }
 
         if (checkedCount > 0) {
             $this.hide();
@@ -71,7 +73,10 @@ $(document).ready(function () {
                 $(".nav").hide();
             }
         }
+
+        clearCompleted();
     });
+
 
     $(document).on("click", ".input-checkbox", function () {
 
@@ -110,3 +115,4 @@ $(document).ready(function () {
         $(".input-checkbox:not(:checked)").parent().parent().show();
     });   
 });
+
